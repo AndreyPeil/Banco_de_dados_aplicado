@@ -1,0 +1,99 @@
+create table aluno(
+	matricula int primary key,
+	nome varchar(50),
+	sexo varchar(10)
+	);
+	
+create table disciplina(
+	codigo int primary key,
+	nome varchar(50),
+	creditos int);
+	
+create table cursa(
+	matricula int,
+	codigo int,
+	semestreAno varchar(7),
+	nota decimal(3,1),
+	falta int,
+	PRIMARY KEY (matricula, codigo, semestreAno),
+    FOREIGN KEY (matricula) REFERENCES ALUNO(matricula),
+    FOREIGN KEY (codigo) REFERENCES DISCIPLINA(codigo)
+	);
+	
+INSERT INTO ALUNO (matricula, nome, sexo) VALUES
+(1, 'João Silva', 'Masculino'),
+(2, 'Maria Santos', 'Feminino'),
+(3, 'Carlos Lima', 'Masculino'),
+(4, 'Ana Oliveira', 'Feminino'),
+(5, 'Pedro Souza', 'Masculino'),
+(6, 'Sofia Alves', 'Feminino'),
+(7, 'Rafael Pereira', 'Masculino'),
+(8, 'Luana Fernandes', 'Feminino'),
+(9, 'Lucas Rodrigues', 'Masculino'),
+(10, 'Beatriz Costa', 'Feminino');
+
+
+INSERT INTO DISCIPLINA (codigo, nome, creditos) VALUES
+(1, 'Estrutura de Dados', 4),
+(2, 'Projeto Integrador', 6),
+(3, 'Orientação a Objetos', 4),
+(4, 'Requisitos de Software', 2),
+(5, 'Sistema de Banco de Dados', 4);
+
+
+INSERT INTO CURSA (matricula, codigo, semestreAno, nota, falta) VALUES
+(1, 1, '1/2021', 8.5, 0),
+(2, 1, '1/2021', 4.0, 3),
+(3, 2, '1/2021', 9.0, 1),
+(4, 3, '2/2021', 7.8, 2),
+(5, 3, '2/2021', 3.5, 4),
+(6, 2, '2/2021', 8.2, 1),
+(7, 3, '1/2022', 7.0, 3),
+(8, 4, '1/2022', 9.5, 0),
+(9, 5, '2/2022', 8.8, 1);
+
+CREATE VIEW quantidade_alunos_por_disciplina AS
+SELECT 
+    d.codigo,
+    d.nome AS disciplina,
+    COUNT(c.matricula) AS quantidade_alunos
+FROM 
+    disciplina d
+JOIN 
+    cursa c ON d.codigo = c.codigo
+GROUP BY 
+    d.codigo, d.nome;
+
+   
+select * from quantidade_alunos_por_disciplina;
+   
+
+create view media_geral as 
+select
+	d.codigo,
+	d.nome as disciplina,
+	avg(c.nota) as media_nota
+from
+	disciplina d
+JOIN 
+    cursa c ON d.codigo = c.codigo
+GROUP BY 
+    d.codigo, d.nome;
+   
+select * from media_geral;
+
+
+create view media_geral_falta as 
+select
+	d.codigo,
+	d.nome as disciplina,
+	avg(c.falta) as media_falta
+from
+	disciplina d
+JOIN 
+    cursa c ON d.codigo = c.codigo
+GROUP BY 
+    d.codigo, d.nome;
+
+   
+select * from media_geral_falta;
