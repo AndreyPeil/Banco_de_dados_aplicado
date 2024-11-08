@@ -1,0 +1,94 @@
+CREATE TABLE dim_cliente (
+    sr_key_cliente INT PRIMARY KEY,
+    id_cliente INT,
+    nome_cliente TEXT,
+    endereco_cliente TEXT,
+    cidade TEXT,
+    estado TEXT,
+    data_inicio DATE,
+    data_fim DATE,
+    id_produto TEXT
+);
+
+CREATE TABLE dim_centro_entrega (
+    sr_key_centro_entrega INT PRIMARY KEY,
+    id_centro_entrega INT,
+    nome_centro TEXT,
+    endereco_centro TEXT,
+    cidade TEXT,
+    estado TEXT,
+    data_inicio DATE,
+    data_fim DATE
+);
+
+CREATE TABLE dim_tempo (
+    id_tempo INT PRIMARY KEY,
+    dia DATE,
+    mes INT,
+    ano INT,
+    trimestre INT,
+    semana INT
+);
+
+CREATE TABLE fato_entrega (
+    entrega_sk INT PRIMARY KEY,
+    pedido_id INT,
+    data_pedido_sk INT REFERENCES dim_tempo(id_tempo),
+    data_saida_sk INT REFERENCES dim_tempo(id_tempo),
+    data_chegada_sk INT REFERENCES dim_tempo(id_tempo),
+    cliente_sk INT REFERENCES dim_cliente(sr_key_cliente),
+    centro_saida_sk INT REFERENCES dim_centro_entrega(sr_key_centro_entrega),
+    centro_destino_sk INT REFERENCES dim_centro_entrega(sr_key_centro_entrega),
+    quantidade INT,
+    valor_total DECIMAL(10,2),
+    quilometragem DECIMAL(10,2),
+    tempo_entrega INTERVAL
+);
+
+-- Total products delivered
+SELECT SUM(quantidade) AS total_produtos
+FROM fato_entrega;
+
+-- Total delivery time
+SELECT SUM(tempo_entrega) AS tempo_total_entrega
+FROM fato_entrega;
+
+-- Average delivery time per order
+SELECT pedido_id, AVG(tempo_entrega) AS tempo_medio_entrega
+FROM fato_entrega
+GROUP BY pedido_id;
+
+-- Average cost per km for deliveries with positive distance
+SELECT AVG(valor_total / quilometragem) AS custo_medio_por_km
+FROM fato_entrega
+WHERE quilometragem > 0;
+
+
+INSERT INTO dim_cliente (sr_key_cliente, id_cliente, nome_cliente, endereco_cliente, cidade, estado, data_inicio, data_fim, id_produto)
+VALUES
+(1, 101, 'John Doe', '123 Main St', 'New York', 'NY', '2022-01-01', '2025-01-01', 'P001'),
+(2, 102, 'Jane Smith', '456 Elm St', 'Los Angeles', 'CA', '2023-03-15', '2024-03-15', 'P002'),
+(3, 103, 'Mike Johnson', '789 Pine St', 'Chicago', 'IL', '2020-06-01', '2023-06-01', 'P003');
+
+INSERT INTO dim_centro_entrega (sr_key_centro_entrega, id_centro_entrega, nome_centro, endereco_centro, cidade, estado, data_inicio, data_fim)
+VALUES
+(1, 201, 'Centro A', '123 Delivery Ave', 'New York', 'NY', '2022-01-01', '2025-01-01'),
+(2, 202, 'Centro B', '456 Logistics Blvd', 'Los Angeles', 'CA', '2023-01-01', '2024-01-01'),
+(3, 203, 'Centro C', '789 Transport Rd', 'Chicago', 'IL', '2020-05-01', '2023-05-01');
+
+
+INSERT INTO dim_tempo (id_tempo, dia, mes, ano, trimestre, semana)
+VALUES
+(1, '2024-01-01', 1, 2024, 1, 1),
+(2, '2024-01-02', 1, 2024, 1, 2),
+(3, '2024-02-01', 2, 2024, 1, 5),
+(4, '2024-03-15', 3, 2024, 1, 11);
+
+INSERT INTO fato_entrega (entrega_sk, pedido_id, data_pedido_sk, data_saida_sk, data_chegada_sk, cliente_sk, centro_saida_sk, centro_destino_sk, quantidade, valor_total, quilometragem, tempo_entrega)
+VALUES
+(1, 1001, 1, 2, 3, 1, 1, 2, 100, 1500.00, 300.00, '2 hours'),
+(2, 1002, 2, 3, 4, 2, 2, 3, 200, 2500.00, 450.00, '3 hours'),
+(3, 1003, 3, 4, 1, 3, 3, 1, 150, 2000.00, 350.00, '2.5 hours');
+
+
+
