@@ -181,10 +181,31 @@ FROM fato_reservas fr
 JOIN dim_cliente c ON fr.id_cliente_sk = c.id_cliente_sk
 GROUP BY c.categoria_fidelidade;
 
-SELECT d.nome_hotel, SUM(fr.duracao_estada) / (COUNT(DISTINCT q.id_quarto) * 100) AS taxa_ocupacao
+SELECT d.nome_hotel, 
+       SUM(fr.duracao_estada) / (COUNT(DISTINCT q.id_quarto) * 100) AS taxa_ocupacao
 FROM fato_reservas fr
 JOIN dim_hotel d ON fr.id_hotel_sk = d.id_hotel_sk
 JOIN dim_quarto q ON fr.id_quarto_sk = q.id_quarto_sk
-GROUP BY d.nome_hotel;
+JOIN dim_tempo t ON fr.id_tempo = t.id_tempo
+WHERE t.ano = 2024 
+GROUP BY d.nome_hotel
+ORDER BY taxa_ocupacao DESC;
 
+SELECT c.categoria_fidelidade, AVG(fr.duracao_estada) AS media_duracao
+FROM fato_reservas fr
+JOIN dim_cliente c ON fr.id_cliente_sk = c.id_cliente_sk
+GROUP BY c.categoria_fidelidade;
+
+SELECT q.id_quarto, q.tipo_quarto, COUNT(q.data_ultima_reforma) AS total_reformas
+FROM dim_quarto q
+WHERE q.status_atual = 'A'  
+GROUP BY q.id_quarto, q.tipo_quarto
+ORDER BY total_reformas DESC;
+
+SELECT c.categoria_fidelidade, h.pais, SUM(fr.valor_total_reserva) AS gasto_total
+FROM fato_reservas fr
+JOIN dim_cliente c ON fr.id_cliente_sk = c.id_cliente_sk
+JOIN dim_hotel h ON fr.id_hotel_sk = h.id_hotel_sk
+GROUP BY c.categoria_fidelidade, h.pais
+ORDER BY gasto_total DESC;
 
