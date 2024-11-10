@@ -1,7 +1,7 @@
 
-<h1>explicar como cada dimensão será implementada, especialmente aquelas que utilizam
+<h3>explicar como cada dimensão será implementada, especialmente aquelas que utilizam
 Slowly Changing Dimensions (SCD). Para o SCD Tipo 2, o aluno deve explicar como manter as
-versões das dimensões, como Clientes e Quartos.</h1>h1
+versões das dimensões, como Clientes e Quartos.</h3>
 
 <p>
 No modelo de dados proposto, as dimensões são implementadas com o uso de chaves surrogate e Slowly Changing Dimensions (SCD), para garantir a integridade e a manutenção do histórico das informações,
@@ -29,9 +29,9 @@ A tabela de fatos chama todas as FKs nela.
 </p>
 '''
 '''
-<h1>
+<h3>
 Identificar e diferenciar as métricas aditivas (como a receita total) das métricas não aditivas
-(como a taxa média de ocupação).</h1>
+(como a taxa média de ocupação).</h3>
 
 <p>
 Receita Total de Reserva: A receita total gerada por todas as reservas pode ser somada diretamente. Exemplo: se em um período houverem várias reservas, basta somar o valor total de cada reserva para obter o valor total.
@@ -46,4 +46,5 @@ Para calcular a taxa média de ocupação, seria necessário calcular uma média
 
 Taxa de Cancelamento de Reservas: Assim como a taxa de ocupação, a taxa de cancelamento não pode ser somada diretamente.
 Para obter a taxa de cancelamento de um período maior, seria necessário calcular a média ponderada de todos os cancelamentos em relação ao total de reservas feitas durante o período.
+</p>
 '''
