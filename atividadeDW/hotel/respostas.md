@@ -1,8 +1,9 @@
-'''
-explicar como cada dimensão será implementada, especialmente aquelas que utilizam
-Slowly Changing Dimensions (SCD). Para o SCD Tipo 2, o aluno deve explicar como manter as
-versões das dimensões, como Clientes e Quartos.
 
+<h1>explicar como cada dimensão será implementada, especialmente aquelas que utilizam
+Slowly Changing Dimensions (SCD). Para o SCD Tipo 2, o aluno deve explicar como manter as
+versões das dimensões, como Clientes e Quartos.</h1>h1
+
+<p>
 No modelo de dados proposto, as dimensões são implementadas com o uso de chaves surrogate e Slowly Changing Dimensions (SCD), para garantir a integridade e a manutenção do histórico das informações,
 mesmo quando elas mudam ao longo do tempo. A principal vantagem disso é que não se perde o histórico, permitindo gerar relatórios detalhados sobre a evolução dos dados.
 
@@ -25,11 +26,14 @@ como uma reforma ou alteração no status de manutenção, uma nova linha será 
 Da mesma forma que na dimensão cliente, usamos o campo status para indicar se a versão é ativa ou inativa.
 
 A tabela de fatos chama todas as FKs nela.
+</p>
 '''
 '''
+<h1>
 Identificar e diferenciar as métricas aditivas (como a receita total) das métricas não aditivas
-(como a taxa média de ocupação).
+(como a taxa média de ocupação).</h1>
 
+<p>
 Receita Total de Reserva: A receita total gerada por todas as reservas pode ser somada diretamente. Exemplo: se em um período houverem várias reservas, basta somar o valor total de cada reserva para obter o valor total.
 Quantidade de Reservas: O número de reservas feitas por clientes ou em um determinado período pode ser somado sem perder o significado.
 
@@ -37,6 +41,7 @@ Número de Noites de Hospedagem: O número total de noites hospedadas em um hote
 
 Métricas Não Aditivas
 Taxa Média de Ocupação: A soma das taxas de ocupação dos quartos ao longo do tempo não é uma soma simples.
+</p>
 Para calcular a taxa média de ocupação, seria necessário calcular uma média ponderada, levando em consideração o número de quartos disponíveis em cada período.
 
 Taxa de Cancelamento de Reservas: Assim como a taxa de ocupação, a taxa de cancelamento não pode ser somada diretamente.
