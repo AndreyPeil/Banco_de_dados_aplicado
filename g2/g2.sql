@@ -172,31 +172,30 @@ create table fact_health_records (
 );
 
 
-INSERT INTO dim_patient (patient_id, active, smoker, gender, address, registration_date, effective_date)
+-- dim pacientes
+INSERT INTO dim_patient (patient_id, active, smoker, gender, address, birth_data,registration_date, effective_date)
 SELECT 
     patient_id,
-    TRUE AS active,  
+    TRUE AS active,  --true pra todos
     smoker,
     gender,
     address,
+    date_of_birth,
     registration_date,
     registration_date 
 FROM Patients;
 
 
-
 -- dim_diagnoses
-
 INSERT INTO dim_diagnoses (diagnose_id, diagnosis_name, risk_factor)
 SELECT 
-    ROW_NUMBER() OVER (ORDER BY diagnosis_code) AS diagnose_id, 
+     diagnosis_code AS diagnose_id, 
     diagnosis_name, 
     risk_factor
 FROM Diagnoses;
 
 
 -- dim_treatment
-
 INSERT INTO dim_treatment (treatment_id, active, treatment, cost, treatment_type)
 SELECT 
     treatment_id,
@@ -208,7 +207,6 @@ FROM Treatments;
 
 
 -- dim_doctor
-
 INSERT INTO dim_doctor (doctor_id, name, specialty, years_of_experience, current_hospital)
 SELECT 
     doctor_id,
